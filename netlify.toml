@@ -1,6 +1,6 @@
 [build]
   command = "rm -rf node_modules && npm install --legacy-peer-deps --force && npm run buildProd"
-  publish = "dist/browser"
+  publish = "dist/company-profile-ui-template"
 
 [build.environment]
   NODE_VERSION = "16"
