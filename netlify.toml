@@ -1,10 +1,10 @@
 [build]
-  command = "rm -rf node_modules && npm install --legacy-peer-deps && npm run buildProd"
+  command = "rm -rf node_modules && npm install --legacy-peer-deps --force && npm run buildProd"
   publish = "dist/browser"
 
 [build.environment]
   NODE_VERSION = "16"
-  NPM_FLAGS = "--legacy-peer-deps"
+  NPM_FLAGS = "--legacy-peer-deps --force"
 
 [[redirects]]
   from = "/*"
