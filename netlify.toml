@@ -1,0 +1,11 @@
+[build]
+  command = "npm install --legacy-peer-deps && npm run buildProd"
+  publish = "dist/browser"
+
+[build.environment]
+  NODE_VERSION = "16"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

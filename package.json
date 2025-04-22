@@ -9,7 +9,7 @@
     "buildStaging": "ng build --configuration=staging --localize",
     "buildProd": "ng build --configuration=production --localize",
     "e2e": "ng e2e",
-    "heroku-postbuild": "bash heroku.sh",
+    "heroku-postbuild": "npm install --legacy-peer-deps && bash heroku.sh",
     "lint": "ng lint",
     "sitemap": "node src/sitemap-generator.ts > seo/sitemap.xml",
     "ng": "ng",
