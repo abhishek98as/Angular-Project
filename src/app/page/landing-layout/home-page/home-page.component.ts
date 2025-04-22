@@ -28,11 +28,11 @@ export interface SwiperData {
   buttonText?: string;
 }
 
-@Component( {
+@Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
-  styleUrls: [ './home-page.component.scss' ],
-} )
+  styleUrls: ['./home-page.component.scss'],
+})
 export class HomePageComponent implements AfterViewInit {
   npmDownloadCounter = { count: 0, id: 'npmDownloadCounterElement' };
   totalStarsCounter = { count: 0, id: 'totalStarsCounterElement' };
@@ -51,7 +51,7 @@ export class HomePageComponent implements AfterViewInit {
 
   PARTNERS: Partner[] = PARTNERS;
 
-  TESTIMONIALS: Testimonial[] = TESTIMONIALS.slice( 0, TESTIMONIALS.length < 3 ? TESTIMONIALS.length : 3 );
+  TESTIMONIALS: Testimonial[] = TESTIMONIALS.slice(0, TESTIMONIALS.length < 3 ? TESTIMONIALS.length : 3);
   FEATURES: Feature[] = FEATURES;
 
   KILO = 1000;
@@ -97,28 +97,29 @@ export class HomePageComponent implements AfterViewInit {
       private analyticsService: AnalyticsService,
       private loadingService: LoadingService
   ) {
-    for ( const productLine of PRODUCT_LINES ) {
-      for ( const product of productLine.products ) {
-        this.slides.push( {
+    // Initialize slides data
+    for (const productLine of PRODUCT_LINES) {
+      for (const product of productLine.products) {
+        this.slides.push({
           title: product.name,
           description: product.description,
-          img: product.logo.replace( '/min', '' ).replace( '.min', '' ),
+          img: product.logo.replace('/min', '').replace('.min', ''),
           background: './assets/slide/background-1.jpg',
           url: product.triable ? product.url : (productLine.key === 'premium' ? URLS.contactUs : product.url),
-          buttonText: product.triable ? 'Try For Free' : ( product.openSource ? 'Open Source' : 'Contact Us' )
-        } );
+          buttonText: product.triable ? 'Try For Free' : (product.openSource ? 'Open Source' : 'Contact Us')
+        });
       }
     }
-    for ( const productLine of LIBRARIES ) {
-      for ( const product of productLine.products ) {
-        this.slides.push( {
+    for (const productLine of LIBRARIES) {
+      for (const product of productLine.products) {
+        this.slides.push({
           title: product.name,
           description: product.description,
-          img: product.logo.replace( '/min', '' ).replace( '.min', '' ),
+          img: product.logo.replace('/min', '').replace('.min', ''),
           background: './assets/slide/background-1.jpg',
           url: productLine.key === 'premium' ? URLS.contactUs : product.url,
           buttonText: product.openSource ? 'Open Source' : 'Contact Us'
-        } );
+        });
       }
     }
   }
@@ -126,7 +127,7 @@ export class HomePageComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.initCountUps();
 
-    this.swiper = new Swiper( '.hero-swiper', {
+    this.swiper = new Swiper('.hero-swiper', {
       speed: 600,
       parallax: true,
       pagination: {
@@ -137,22 +138,22 @@ export class HomePageComponent implements AfterViewInit {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
-    } );
+    });
   }
 
-  countUpFormatter( n: number ) {
-    if ( n < this.KILO ) {
+  countUpFormatter(n: number) {
+    if (n < this.KILO) {
       return n + '';
     } else {
-      if ( n < this.MILLION ) {
-        return Math.round( ( n / this.KILO ) * 10 ) / 10 + 'k';
+      if (n < this.MILLION) {
+        return Math.round((n / this.KILO) * 10) / 10 + 'k';
       } else {
-        return Math.round( ( n / this.MILLION ) * 10 ) / 10 + 'M';
+        return Math.round((n / this.MILLION) * 10) / 10 + 'M';
       }
     }
   }
 
-  getPresentationCardFooter( isOpenSource: boolean ): string {
+  getPresentationCardFooter(isOpenSource: boolean): string {
     return isOpenSource ? $localize`:@@productTypeTag.openSource:opensource` : $localize`:@@productTypeTag.premium:premium`;
   }
 
@@ -164,69 +165,70 @@ export class HomePageComponent implements AfterViewInit {
       decimalPlaces: 0
     };
 
-    this.analyticsService.getSystemInfo( 'npm-downloads' ).subscribe( ( count ) => {
+    // Get npm download counts from analytics service
+    this.analyticsService.getSystemInfo('npm-downloads').subscribe((count) => {
       this.npmCounterLoading = false;
-      this.loadingService.setLoading( this.npmCounterLoading );
+      this.loadingService.setLoading(this.npmCounterLoading);
       this.npmDownloadCounter.count = count;
-      this.startCounter( options, this.npmDownloadCounter );
-    } );
+      this.startCounter(options, this.npmDownloadCounter);
+    });
 
     this.totalStarsCounter.count = 0;
-
     let totalProducts = 0;
-
     this.openSourceRatioCounter.count = 0;
 
-    const promises: Promise<any>[] = [];
-    for ( const system of [ PRODUCT_LINES, LIBRARIES, PLUGINS ] ) {
-
-      for ( const productLine of system ) {
-
+    // Create an array to hold our Observable requests
+    const observables = [];
+    
+    for (const system of [PRODUCT_LINES, LIBRARIES, PLUGINS]) {
+      for (const productLine of system) {
         totalProducts += productLine.products.length;
 
-        for ( const product of productLine.products ) {
-          if ( product.url !== URLS.maintenance && product.openSource ) {
-            promises.push( this.githubService.getGithubStars( product.key ) );
+        for (const product of productLine.products) {
+          if (product.url !== URLS.maintenance && product.openSource) {
+            // Add each GitHub stars observable to our array
+            observables.push(this.githubService.getGithubStars(product.key));
           }
 
-          if ( product.openSource ) {
+          if (product.openSource) {
             this.openSourceRatioCounter.count++;
           }
         }
       }
     }
 
-    forkJoin( promises ).subscribe( results => {
-      results.forEach( result => {
+    // Use forkJoin to wait for all observables to complete
+    forkJoin(observables).subscribe(results => {
+      results.forEach(result => {
         this.githubCounterLoading = false;
         this.totalStarsCounter.count += result.count;
-      } );
-      this.startCounter( options, this.totalStarsCounter );
-    } );
+      });
+      this.startCounter(options, this.totalStarsCounter);
+    });
 
-    this.openSourceRatioCounter.count = ( this.openSourceRatioCounter.count / totalProducts ) * 100;
-
-    this.startCounter( options, this.openSourceRatioCounter );
+    // Calculate open source ratio
+    this.openSourceRatioCounter.count = (this.openSourceRatioCounter.count / totalProducts) * 100;
+    this.startCounter(options, this.openSourceRatioCounter);
   }
 
-  private startCounter( options: { duration: number; useGrouping: boolean; formattingFn, decimalPlaces: number }, counter ) {
-    options.formattingFn = ( n: number ) => {
-      return this.countUpFormatter( n );
+  private startCounter(options: { duration: number; useGrouping: boolean; formattingFn, decimalPlaces: number }, counter) {
+    options.formattingFn = (n: number) => {
+      return this.countUpFormatter(n);
     };
 
-    if ( counter.count < this.KILO ) {
+    if (counter.count < this.KILO) {
       options.duration = 2;
-    } else if ( counter.count < this.MILLION ) {
+    } else if (counter.count < this.MILLION) {
       options.duration = 3;
     } else {
       options.duration = 4;
     }
 
-    const eventCountUp = new CountUp( counter.id, counter.count, options );
-    if ( !eventCountUp.error ) {
+    const eventCountUp = new CountUp(counter.id, counter.count, options);
+    if (!eventCountUp.error) {
       eventCountUp.start();
     } else {
-      console.error( eventCountUp.error );
+      console.error(eventCountUp.error);
     }
   }
 }

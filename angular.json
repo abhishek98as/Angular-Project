@@ -59,19 +59,15 @@
                 "output": "/"
               }
             ],
-            "styles": [
-              "src/styles/styles.scss"
-            ],
+            "styles": ["src/styles/styles.scss"],
             "scripts": [],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json",
-            "localize": true
+            "localize": ["en-US"]
           },
           "configurations": {
             "fr": {
-              "localize": [
-                "fr"
-              ]
+              "localize": ["en-US"]
             },
             "production": {
               "fileReplacements": [
@@ -135,7 +131,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "company-profile-ui-template:build"
+            "browserTarget": "company-profile-ui-template:build:local"
           },
           "configurations": {
             "fr": {
@@ -195,9 +191,7 @@
                 "output": "/"
               }
             ],
-            "styles": [
-              "src/styles/styles.scss"
-            ],
+            "styles": ["src/styles/styles.scss"],
             "scripts": []
           }
         },
@@ -209,9 +203,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -228,6 +220,5 @@
         }
       }
     }
-  },
-  "defaultProject": "company-profile-ui-template"
+  }
 }

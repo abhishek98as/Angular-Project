@@ -1,5 +1,4 @@
-<div [class.dark-theme]="darkLightSetting === 'dark'" [class.light-theme]="darkLightSetting === 'light'"
-     [class]="setTheme()"
-     id="app-component">
+<div [class]="setTheme()">
   <router-outlet></router-outlet>
+  <app-frontend-only-banner></app-frontend-only-banner>
 </div>

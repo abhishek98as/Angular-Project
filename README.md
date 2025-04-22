@@ -1,3 +1,5 @@
+# Company Profile UI Template - Frontend Only Version
+
 <p align="center">
   <a href="https://opentemplatehub.com">
     <img src="https://raw.githubusercontent.com/open-template-hub/open-template-hub.github.io/master/assets/logo/ui/web-ui-logo.png" alt="Logo" width=200>
@@ -5,8 +7,10 @@
 </p>
 
 <h1 align="center">
-Open Template Hub - Company Profile UI Template v5
+Open Template Hub - Company Profile UI Template v5 (Frontend Only)
 </h1>
+
+> **Important Note**: This is a frontend-only version of the Company Profile UI Template, with all backend API calls replaced with mock data. It maintains the same UI design and appearance but operates entirely in the browser without requiring any backend services.
 
 [![License](https://img.shields.io/github/license/open-template-hub/company-profile-ui-template?color=43b043&style=for-the-badge)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/open-template-hub/company-profile-ui-template?color=43b043&style=for-the-badge)](https://github.com/open-template-hub/company-profile-ui-template/issues)
@@ -17,6 +21,23 @@ Open Template Hub - Company Profile UI Template v5
 [![SonarCloud](https://img.shields.io/sonar/quality_gate/open-template-hub_company-profile-ui-template?server=https%3A%2F%2Fsonarcloud.io&label=Sonar%20Cloud&style=for-the-badge&logo=sonarcloud)](https://sonarcloud.io/dashboard?id=open-template-hub_company-profile-ui-template)
 
 Company Profile UI Template is a modern, responsive, and customizable company profiles UI template for your business. It contains reusable components, theme color, and design support along with dark theme support.
+
+## Frontend-Only Features
+
+This version of the template includes:
+
+- All UI components and design features of the original template
+- Mock data services to simulate backend responses
+- Frontend-only form submissions
+- Simplified environment configuration
+- No backend dependencies required
+
+This makes it perfect for:
+
+- Static website deployments
+- UI/UX demonstrations
+- Design showcases
+- Quick prototyping
 
 <h3 align="center">
   For demo click the image below ⬇️
@@ -110,10 +131,10 @@ In order to deploy and debug locally, run following configurations in order:
 1. **[install.run.xml](.run/install.run.xml)**
 2. **[buildLocal.run.xml](.run/buildLocal.run.xml)**
 3. **startLocal**
-    1. **[startLocal.run.xml](.run/startLocal.run.xml) (uses local api)**
-    2. **[startLocalFromIPhone.run.xml](.run/startLocalFromIPhone.run.xml) (uses local api - accessible from iphone)**
-    3. **[startLocalToStagingApi.run.xml](.run/startLocalToStagingApi.run.xml) (uses staging api)**
-    4. **[startLocalFromIPhoneToStagingApi.run.xml](.run/startLocalFromIPhoneToStagingApi.run.xml) (uses staging api - accessible from iphone)**
+   1. **[startLocal.run.xml](.run/startLocal.run.xml) (uses local api)**
+   2. **[startLocalFromIPhone.run.xml](.run/startLocalFromIPhone.run.xml) (uses local api - accessible from iphone)**
+   3. **[startLocalToStagingApi.run.xml](.run/startLocalToStagingApi.run.xml) (uses staging api)**
+   4. **[startLocalFromIPhoneToStagingApi.run.xml](.run/startLocalFromIPhoneToStagingApi.run.xml) (uses staging api - accessible from iphone)**
 4. **[debug.run.xml](.run/debug.run.xml)**
 
 <br/>
@@ -175,6 +196,7 @@ Refer to **[OUTDATED.md](docs/OUTDATED.md)** to see outdated npm packages and up
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Contributing
@@ -194,4 +216,3 @@ Refer to **[CODE_OF_CONDUCT.md](https://github.com/open-template-hub/.github/blo
 The source code for this project is released under the [MIT License](LICENSE).
 
 <table align="right"><tr><td><a href="https://opentemplatehub.com"><img src="https://raw.githubusercontent.com/open-template-hub/open-template-hub.github.io/master/assets/logo/brand-logo.png" width="50px" alt="oth"/></a></td><td><b>Open Template Hub © 2023</b></td></tr></table>
-

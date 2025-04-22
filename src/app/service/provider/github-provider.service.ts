@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environmentCommon } from '../../../environments/environment-common';
 import { Activity } from '../../model/activity/activity.model';
+import { MockDataService } from '../mock-data/mock-data.service';
 import { UtilService } from '../util/util.service';
 
-@Injectable( {
+@Injectable({
   providedIn: 'root',
-} )
+})
 export class GithubProviderService {
 
   GITHUB_DATA = {
@@ -15,82 +18,50 @@ export class GithubProviderService {
     releaseVersion: $localize`:@@githubCounters.releaseVersion:Release Version`
   };
 
-  constructor( private util: UtilService ) {
-    // Intentionally blank
+  constructor(
+    private util: UtilService,
+    private mockDataService: MockDataService
+  ) {}
+
+  // Convert to Observable for easier integration with Angular
+  getGithubStars(productKey: string): Observable<any> {
+    return this.mockDataService.getProductInfo(productKey).pipe(
+      map(product => ({ productKey, count: product.stars }))
+    );
   }
 
-  getGithubStars = async ( productKey: string ) => {
-    const uri = `${ environmentCommon.website.github.api.repo }/${ environmentCommon.company.social.github }/${ productKey }`;
+  getGithubCounters(productKey: string): Observable<any[]> {
+    return this.mockDataService.getProductInfo(productKey).pipe(
+      map(product => {
+        return [
+          {
+            name: this.GITHUB_DATA.releaseVersion,
+            value: product.version,
+          },
+          {
+            name: this.GITHUB_DATA.stars,
+            value: product.stars.toString(),
+          },
+          {
+            name: this.GITHUB_DATA.forks,
+            value: product.forks.toString(),
+          },
+          {
+            name: this.GITHUB_DATA.subscribers,
+            value: product.subscribers.toString(),
+          }
+        ];
+      })
+    );
+  }
 
-    const response = await this.util.corsRequest( uri );
-    if ( response != null ) {
-      const json = JSON.parse( response as string );
-      return { productKey, count: json.stargazers_count ? json.stargazers_count : 0 };
-    } else {
-      return { productKey, count: 0 };
-    }
-  };
+  getReleaseVersion(productKey: string): Observable<string> {
+    return this.mockDataService.getProductInfo(productKey).pipe(
+      map(product => product.version)
+    );
+  }
 
-  getGithubCounters = async ( productKey: string ) => {
-    const uri = `${ environmentCommon.website.github.api.repo }/${ environmentCommon.company.social.github }/${ productKey }`;
-
-    const counters = [];
-
-    // Using Xml Http Request because http.get cause CORS issue
-    const releaseVersion = await this.getReleaseVersion( productKey );
-    if ( releaseVersion != null ) {
-      counters.push( {
-        name: this.GITHUB_DATA.releaseVersion,
-        value: releaseVersion,
-      } );
-    }
-
-    const response = await this.util.corsRequest( uri );
-    if ( response != null ) {
-      const json = JSON.parse( response as string );
-      counters.push( {
-        name: this.GITHUB_DATA.stars,
-        value: json.stargazers_count ? json.stargazers_count : '0',
-      } );
-
-      counters.push( {
-        name: this.GITHUB_DATA.forks,
-        value: json.forks_count ? json.forks_count : '0',
-      } );
-
-      counters.push( {
-        name: this.GITHUB_DATA.subscribers,
-        value: json.subscribers_count ? json.subscribers_count : '0',
-      } );
-    }
-    return counters;
-  };
-
-  getReleaseVersion = async ( productKey: string ) => {
-    const uri = `${ environmentCommon.website.github.api.repo }/${ environmentCommon.company.social.github }/${ productKey }/releases`;
-    const response = await this.util.corsRequest( uri );
-    if ( response != null ) {
-      const json = JSON.parse( response as string );
-      return json[ 0 ]?.name;
-    }
-
-    return null;
-  };
-
-  getCommitHistory = async ( productKey: string ) => {
-    const today = new Date();
-    const lastYear = new Date( today.getFullYear() - 1, today.getMonth(), today.getDate() );
-
-    const uri = `${ environmentCommon.website.github.api.repo }/${ environmentCommon.company.social.github }/${ productKey }/commits?per_page=100&since=${ lastYear.toISOString() }`;
-    const response = await this.util.corsRequest( uri );
-    if ( response != null ) {
-      const json: any[] = JSON.parse( response as string );
-      return json.map( item => {
-        const activity: Activity = { type: 'commit', date: new Date( item.commit?.committer?.date ), payload: item.sha };
-        return activity;
-      } );
-    }
-
-    return null;
-  };
+  getCommitHistory(productKey: string): Observable<Activity[]> {
+    return this.mockDataService.getProductActivity(productKey);
+  }
 }

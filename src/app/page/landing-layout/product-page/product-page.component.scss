@@ -8,6 +8,20 @@
   @include util.flex-center-center;
 
   width: 100%;
+
+  .mock-data-notice {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin: 15px 0;
+    color: #856404;
+    font-size: 14px;
+    
+    p {
+      margin: 0;
+    }
+  }
 }
 
 .features {

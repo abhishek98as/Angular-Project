@@ -1,6 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -52,8 +52,8 @@ import { ProductPresentationComponent } from './component/product-represantation
 import { BusinessPartnerSwiperComponent } from './component/swiper/business-partner-swiper/business-partner-swiper.component';
 import { PresentationSwiperComponent } from './component/swiper/presentation-swiper/presentation-swiper.component';
 import { ScreenshotSwiperComponent } from './component/swiper/screenshot-swiper/screenshot-swiper.component';
-import { RequestInterceptor } from './interceptor/request/request.interceptor';
-import { ResponseInterceptor } from './interceptor/response/response.interceptor';
+import { FrontendOnlyBannerComponent } from './component/banner/frontend-only-banner/frontend-only-banner.component';
+import { NavigationInterceptor } from './interceptor/navigation/navigation.interceptor';
 import { AboutUsPageComponent } from './page/landing-layout/about-us-page/about-us-page.component';
 import { BlogContentPageComponent } from './page/landing-layout/blog-page/blog-content-page/blog-content-page.component';
 import { BlogPageComponent } from './page/landing-layout/blog-page/blog-page.component';
@@ -76,7 +76,7 @@ import { SitemapPageComponent } from './page/landing-layout/sitemap-page/sitemap
 import { ExternalRedirectPageComponent } from './page/splash-layout/external-redirect-page/external-redirect-page.component';
 import { SplashLayoutComponent } from './page/splash-layout/splash-layout.component';
 
-@NgModule( {
+@NgModule({
   declarations: [
     AppComponent,
     HomePageComponent,
@@ -135,6 +135,7 @@ import { SplashLayoutComponent } from './page/splash-layout/splash-layout.compon
     DocsContentPageComponent,
     StepTimelineCardComponent,
     ContactInformationCardComponent,
+    FrontendOnlyBannerComponent,
   ],
   imports: [
     BrowserModule,
@@ -150,22 +151,19 @@ import { SplashLayoutComponent } from './page/splash-layout/splash-layout.compon
     ButtonModule,
     AnimatedCodeEditorModule,
     HeroModule,
-    ToastrModule.forRoot( { preventDuplicates: true } ),
-    MarkdownModule.forRoot( { loader: HttpClient } ),
-    ServiceWorkerModule.register( 'ngsw-worker.js', {
-      enabled: [ 'production', 'staging' ].includes( environment.identity ),
+    ToastrModule.forRoot({ preventDuplicates: true }),
+    MarkdownModule.forRoot({ loader: HttpClient }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: ['production', 'staging'].includes(environment.identity),
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerImmediately'
-    } ),
-    /*HttpClientInMemoryWebApiModule.forRoot(
-     InMemoryDataService, { dataEncapsulation: false } )*/
+    }),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true }
+    NavigationInterceptor
   ],
-  bootstrap: [ AppComponent ]
-} )
+  bootstrap: [AppComponent]
+})
 export class AppModule {
 }
